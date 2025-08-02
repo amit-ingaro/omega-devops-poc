@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  workflow-chart:
+  - apiVersion: v2
+    appVersion: "1.0"
+    created: "2025-08-02T12:16:02.606122+05:30"
+    description: A Helm chart for Kubernetes
+    digest: 501fd2234ac7870a6a6da44294e7213eb8e271eba721225ad0b5738e98af49f0
+    name: workflow-chart
+    type: application
+    urls:
+    - workflow-chart-0.1.0.tgz
+    version: 0.1.0
+generated: "2025-08-02T12:16:02.605674+05:30"
