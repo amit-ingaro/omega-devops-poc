@@ -1,0 +1,52 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: omega-{{ .Values.name }}-workflow-template
+  namespace: {{ .Values.namespace }}
+spec:
+  entrypoint: main
+  serviceAccountName: argo
+  podGC:
+    strategy: {{ .Values.podGC }}
+  templates:
+    - name: main
+      container:
+        image: {{ .Values.image }}
+        imagePullPolicy: {{ .Values.imagePullPolicy}}
+        command: [ "python" ]
+        args: [ "main.py" ]
+        env:
+          - name: OMEGA_DB_DIALECT
+            value: "{{ .Values.omega.database.dialect }}"
+          - name: OMEGA_DB_HOST
+            value: "{{ .Values.omega.database.host }}"
+          - name: OMEGA_DB_PORT
+            value: "{{ .Values.omega.database.port }}"
+          - name: OMEGA_DB_DATABASE
+            value: "{{ .Values.omega.database.database }}"
+          - name: OMEGA_DB_SCHEMA
+            value: "{{ .Values.omega.database.schema }}"
+          - name: OMEGA_DB_USERNAME
+            value: "{{ .Values.omega.database.username }}"
+          - name: OMEGA_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "workflow-chart.fullname" . }}-secret
+                key: omega_database_password
+          - name: RTDS_DB_DIALECT
+            value: "{{ .Values.omega.rtds.dialect }}"
+          - name: RTDS_DB_HOST
+            value: "{{ .Values.omega.rtds.host }}"
+          - name: RTDS_DB_PORT
+            value: "{{ .Values.omega.rtds.port }}"
+          - name: RTDS_DB_DATABASE
+            value: "{{ .Values.omega.rtds.database }}"
+          - name: RTDS_DB_SCHEMA
+            value: "{{ .Values.omega.rtds.schema }}"
+          - name: RTDS_DB_USERNAME
+            value: "{{ .Values.omega.rtds.username }}"
+          - name: RTDS_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "workflow-chart.fullname" . }}-secret
+                key: rtds_database_password

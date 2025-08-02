@@ -1,0 +1,26 @@
+namespace: argo
+schedule: "*/1 * * * *"
+name: example-name
+image: rtds-loader:latest
+imagePullPolicy: Never
+
+podGC: OnPodSuccess
+
+omega:
+  database:
+    dialect: "postgresql+psycopg2"
+    host: "host.minikube.internal"
+    port: "5432"
+    database: "omega"
+    schema: "omega"
+    username: "puser"
+    password: "ppass"
+
+  rtds:
+    dialect: "mssql+pyodbc"
+    host: "msql-sap-qa.rtd.pg.com"
+    port: "1433"
+    database: "test_schme"
+    schema: "sap"
+    username: "secureuser"
+    password: "securepassword"
