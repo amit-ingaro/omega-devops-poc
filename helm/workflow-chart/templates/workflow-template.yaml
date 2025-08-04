@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
-  name: omega-{{ .Values.name }}-workflow-template
+  name: omega-{{ include "name" .}}-workflow-template
   namespace: {{ .Values.namespace }}
 spec:
   entrypoint: main
@@ -13,40 +13,46 @@ spec:
       container:
         image: {{ .Values.image }}
         imagePullPolicy: {{ .Values.imagePullPolicy}}
-        command: [ "python" ]
-        args: [ "main.py" ]
+        command: {{ .Values.container.command }}
+        args: {{ .Values.container.args }}
         env:
-          - name: OMEGA_DB_DIALECT
+          - name: TARGET_DIALECT
             value: "{{ .Values.omega.database.dialect }}"
-          - name: OMEGA_DB_HOST
+          - name: TARGET_HOSTNAME
             value: "{{ .Values.omega.database.host }}"
-          - name: OMEGA_DB_PORT
+          - name: TARGET_PORT
             value: "{{ .Values.omega.database.port }}"
-          - name: OMEGA_DB_DATABASE
+          - name: TARGET_DATABASE
             value: "{{ .Values.omega.database.database }}"
-          - name: OMEGA_DB_SCHEMA
+          - name: TARGET_SCHEMA
             value: "{{ .Values.omega.database.schema }}"
-          - name: OMEGA_DB_USERNAME
+          - name: TARGET_USER
             value: "{{ .Values.omega.database.username }}"
-          - name: OMEGA_DB_PASSWORD
+          - name: TARGET_PASSWORD_SECRET
             valueFrom:
               secretKeyRef:
                 name: {{ include "workflow-chart.fullname" . }}-secret
                 key: omega_database_password
-          - name: RTDS_DB_DIALECT
+          - name: SOURCE_DIALECT
             value: "{{ .Values.omega.rtds.dialect }}"
-          - name: RTDS_DB_HOST
+          - name: SOURCE_HOSTNAME
             value: "{{ .Values.omega.rtds.host }}"
-          - name: RTDS_DB_PORT
+          - name: SOURCE_PORT
             value: "{{ .Values.omega.rtds.port }}"
-          - name: RTDS_DB_DATABASE
+          - name: SOURCE_DATABASE
             value: "{{ .Values.omega.rtds.database }}"
-          - name: RTDS_DB_SCHEMA
+          - name: SOURCE_SCHEMA
             value: "{{ .Values.omega.rtds.schema }}"
-          - name: RTDS_DB_USERNAME
+          - name: SOURCE_USER
             value: "{{ .Values.omega.rtds.username }}"
-          - name: RTDS_DB_PASSWORD
+          - name: SOURCE_DRIVER
+            value: "{{ .Values.omega.rtds.driver }}"
+          - name: SOURCE_PASSWORD_SECRET
             valueFrom:
               secretKeyRef:
                 name: {{ include "workflow-chart.fullname" . }}-secret
                 key: rtds_database_password
+          - name: API_GATEWAY_URL
+            value: "{{ .Values.otc_hub.api_gateway_url }}"
+          - name: FILE_STORE
+            value: "{{ .Values.omega.data_processor.filestore }}"

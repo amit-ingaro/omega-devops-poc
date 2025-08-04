@@ -1,3 +1,8 @@
+{{- define "name" -}}
+    {{ .Values.name }}
+{{- end -}}
+
+
 {{/*
 Expand the name of the chart.
 */}}

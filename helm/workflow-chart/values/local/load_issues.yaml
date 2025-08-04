@@ -1,0 +1,4 @@
+name: "load-issues"
+container:
+  command: [ "python" ]
+  args: [ "load_issues.py" ]

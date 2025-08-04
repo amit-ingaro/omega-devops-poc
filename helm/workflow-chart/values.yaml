@@ -1,7 +1,7 @@
 namespace: argo
 schedule: "*/1 * * * *"
 name: example-name
-image: rtds-loader:latest
+image: data-loader:latest
 imagePullPolicy: Never
 
 podGC: OnPodSuccess
@@ -20,7 +20,27 @@ omega:
     dialect: "mssql+pyodbc"
     host: "msql-sap-qa.rtd.pg.com"
     port: "1433"
-    database: "test_schme"
+    database: "LIB_F6A_HANA"
     schema: "sap"
-    username: "secureuser"
-    password: "securepassword"
+    username: "OMEGA_im"
+    password: ""
+    driver: "ODBC Driver 17 for SQL Server"
+
+  blueprism:
+    dialect: "mssql+pyodbc"
+    host: "pegadevdatalake01.database.windows.net"
+    port: "1433"
+    database: "OTC_EU_SmartAutomation"
+    username: "pgsqadmin"
+    password: ""
+    driver: "ODBC Driver 17 for SQL Server"
+
+  data_processor:
+    filestore: "/tmp"
+
+otc_hub:
+  api_gateway_url: http://host.minikube.internal:8002/gateway
+
+container:
+  command: [ "echo" ]
+  args: [ "Hello, from data loader" ]
